@@ -1,24 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import "./App.css";
+import { QuotesContext } from "../src/context/QuotesContext";
+import axios from "axios";
+import Quotes from "../src/components/Quotes";
+import QuotesList from "../src/components/QuotesList";
+import Forms from "./components/Forms";
 
 function App() {
+  const [addQuote, setAddQuote] = useState([]);
+  useEffect(() => {
+    axios.get(" https://quotes-db-mike.herokuapp.com/quotes").then(res => {
+      // console.log(res))
+      setAddQuote(res.data);
+      console.log(res.data);
+    });
+  },[]);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <QuotesContext.Provider value={{ addQuote, setAddQuote }}>
+        <QuotesList />
+        <Forms/>
+      </QuotesContext.Provider>
+      
     </div>
   );
 }
